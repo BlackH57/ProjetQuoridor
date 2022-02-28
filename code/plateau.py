@@ -1,34 +1,41 @@
+from codeClass import Player
+
 class Plateau:
-    __init__(self, length, player1, player2):
+    length =9
+    def __init__(self, length, player1, player2):
         self.length = length
-        self.computerLength = 2*length
+        self.computerLength = 2*length-1
         self.plateau = []
         self.player1 = player1
         self.player2 = player2
         self.placedWall = []
-        for i in range(0,length):
+        for i in range(0,self.computerLength):
             self.plateau.append([0 for i in range(0,length)])
 
-        def setPlayeur(noPlayer, player):
+    def setPlayeur(self,noPlayer, player):
 
-            if(not isinstanceof(noPlayer, int):
-                print("Argument <noPlayer> non valide.")
-                if(not isinstanceof(player, Player):
-                    print("Argument <player> non valide.")
+        if(not isinstance(noPlayer, int)):
+            print("Argument <noPlayer> non valide.")
+            if(not isinstance(player, Player)):
+                print("Argument <player> non valide.")
                 return
-            if (noPlayer == 1):
-                self.player1 = player
-            if (noPlayer == 2):
-                self.player2 = player
-            else:
-                print("f{noPplayer} n'est pas un chiffre valide")
+        if (noPlayer == 1):
+            self.player1 = player
+        if (noPlayer == 2):
+            self.player2 = player
+        else:
+            print("f{noPplayer} n'est pas un chiffre valide")
         
-        def placeWall(wall):
-            self.placedWall.append(wall)
+    def placeWall(self, wall):
+        self.placedWall.append(wall)
 
-        def affichagePlateau():
-            for i in range(0,computerLength):
-                res = ""
-                for j in range(0, computerLength):
-                    res = res + str(plateau[i][j])
-                print(res)
+    def affichagePlateau(self):
+        for i in range(0, self.computerLength):
+            res = ""
+            for j in range(0, self.computerLength):
+                res = res + str(self.plateau[i][j])
+            print(res)
+            return res
+
+    def __str__(self):
+        return self.affichagePlateau()
