@@ -1,46 +1,38 @@
+import pygame
+
 class Player:
 
-    def __init__(self, name, nbWall, noPlayer, mapLength):
+    def __init__(self, name, nbWall, noPlayer, mapLength, imageFileName):
+        """
+        name : str, nbWall: int, noPlayer: 0 or 1, mapLength : int
+        """
         self.name = name
         self.nbWall = nbWall
         self.noPlayer = noPlayer
-
-        self.coordX = 5
-        if(self.noPlayer == 0):
+        self.image = pygame.image.load(imageFileName)
+        self.coordX = mapLength/2
+        if(self.noPlayer == 1):
             self.coordY = 0
         else:
             self.coordY = mapLength
 
     def getCoord(self):
-        return "("+str(self.coordX)+","+str(self.coordY)+")"
+        """
+        Return coordinate of the player as a tuple : (coordX, coordY) 
+        """
+        return self.coordX, self.coordY
 
-    def move(self, direction):
-        if (direction == "N"):
-            self.coordY += 1
-        if (direction == "S"):
-            self.coordY -= 1
-        if (direction == 'E'):
-            self.coordX -= 1
-        if (direction == 'N'):
-            self.coordX += 1
-
-
-
-    def jouer(self, typePlay):
-        if(typePlay == 0): #place wall
-            if(self.nbWall>0):
-                self.nbWall-=1
-
-            else:
-                print("Tu n'as plus de mur !")
-
-        if(typePlay == 1): #move player
-            direction = input("north : N, east : E, ouest : O, south : S ")
-            self.move(direction)
-
+    def move(self, coordX, coordY):
+        """
+        coordX : int, coordY. 
+        Must be between 0 and Plateau.computerLength
+        Set coordX and coordY attribute.
+        """
+        self.coordX = coordX
+        self.coordY = coordY
 
     def __str__(self):
-        return "No player : "+ self.noPlayer+" Name: f{self.name} nbBrick : "+self.nbWall+" coord :" + self.getCoord()
+        return "No player : "+ str(self.noPlayer)+" Name:"+ self.name +"nb wall(s) left : "+self.nbWall+" coords :" + str(self.getCoord())
 
 
 
