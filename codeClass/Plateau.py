@@ -41,7 +41,7 @@ class Plateau:
     def reachableFrom(self,coords):
         """
         coords : (int,int)
-        Return a list of case accessible from coords
+        Return a set of case accessible from coords
         """
         coordX, coordY = coords
         res = []
@@ -51,37 +51,54 @@ class Plateau:
         if coordX<= self.computerLength-2 and self.plateau[coordX+1][coordY] == 0 and self.plateau[coordX+2][coordY] == 0:
             res.append((coordX + 2, coordY))
 
-        if coordY<= self.computerLength-2 and self.plateau[coordX][coordY+1] == 0 and self.plateau[coordX][coordY+2] == 0:
-            res.append((coordX, coordY + 2))
-
-        if coordX>= 2 and self.plateau[coordX-1][coordY] == 0 and self.plateau[coordX-2][coordY] == 0:
-            res.append((coordX - 2, coordY))
-
-        if coordY>= 2 and self.plateau[coordX][coordY - 1] == 0 and self.plateau[coordX][coordY - 2] == 0:
-            res.append((coordX, coordY - 2))
-
-        if coordX<= self.computerLength-4 and self.plateau[coordX+1][coordY] == 0 and self.plateau[coordX+2][coordY] in [1,2]:
-            if self.plateau[coordX+4][coordY] == 0:
+        elif coordX<= self.computerLength-4 and self.plateau[coordX+1][coordY] == 0 and self.plateau[coordX+2][coordY] in [1,2]:
+            if self.plateau[coordX+3][coordY] == 0:
                 res.append((coordX+4, coordY))
             else:
                 if coordY<= self.computerLength - 2 and self.plateau[coordX+2][coordY+1] == 0:
                     res.append((coordX+2, coordY+2))
                 if coordY>=2 and self.plateau[coordX+2][coordY-1] ==  0:
-                    res.append((coordX+2, coordY-1))
+                    res.append((coordX+2, coordY-2))
 
-        #not done yet. Need to check if there's a player next to us, and check if there's a wall behind him
-        #if there's no wall, check if you can go 2 cases further (yes if we play at two)
-        #if there's a wall, check the cases that are distant by one in the other direction with all the precedent work (looking for wall etc...)
-        #the precedent if is an exemple of it should be done
-        if coordY<= self.computerLength-2 and self.plateau[coordX][coordY +1] == 0 and self.plateau[coordX][coordY+2] in [1,2]:
+
+        if coordY<= self.computerLength-2 and self.plateau[coordX][coordY+1] == 0 and self.plateau[coordX][coordY+2] == 0:
             res.append((coordX, coordY + 2))
 
-        if coordX>= 2 and self.plateau[coordX-1][coordY] == 0 and self.plateau[coordX-2][coordY] in [1,2]:
+        elif coordY<= self.computerLength-4 and self.plateau[coordX][coordY+1] == 0 and self.plateau[coordX][coordY+2] in [1,2]:
+            if self.plateau[coordX][coordY+3] == 0:
+                res.append((coordX, coordY+4))
+            else:
+                if coordX<= self.computerLength - 2 and self.plateau[coordX+1][coordY+2] == 0:
+                    res.append((coordX+2, coordY+2))
+                if coordX>=2 and self.plateau[coordX-1][coordY+2] ==  0:
+                    res.append((coordX-2, coordY+2))
+
+
+        if coordX>= 2 and self.plateau[coordX-1][coordY] == 0 and self.plateau[coordX-2][coordY] == 0:
             res.append((coordX - 2, coordY))
 
-        if coordY>= 2 and self.plateau[coordX][coordY + 2] == 0 and self.plateau[coordX][coordY+2] in [1]:
-            res.append((coordX, coordY - 2))
+        elif coordX>=4 and self.plateau[coordX-1][coordY] == 0 and self.plateau[coordX-2][coordY] in [1,2]:
+            if self.plateau[coordX-3][coordY] == 0:
+                res.append((coordX-4, coordY))
+            else:
+                if coordY>= 2 and self.plateau[coordX-2][coordY-1] == 0:
+                    res.append((coordX-2,coordY-2))
+                if coordY<= self.computerLength -2 and self.plateau[coordX-2][coordY+1] == 0:
+                    res.append((coordX-2, coordY+2))
 
+        if coordY>= 2 and self.plateau[coordX][coordY - 1] == 0 and self.plateau[coordX][coordY - 2] == 0:
+            res.append((coordX, coordY - 2))
+        
+        elif coordY>=4 and self.plateau[coordX][coordY-1] == 0 and self.plateau[coordX][coordY-2] in [1,2]:
+            if self.plateau[coordX][coordY-3] == 0:
+                res.append((coordX, coordY-4))
+            else:
+                if coordY>= 2 and self.plateau[coordX-1][coordY-2] == 0:
+                    res.append((coordX-2,coordY-2))
+                if coordY<= self.computerLength -2 and self.plateau[coordX+1][coordY-2] == 0:
+                    res.append((coordX+2, coordY-2))
+
+        return {case for case in res}
 
     def affichagePlateau(self):
         """
