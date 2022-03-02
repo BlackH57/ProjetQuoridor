@@ -18,7 +18,7 @@ class Game:
         """
         return (player.coordY == 0 and player.noPlayer == 2) or (player.coordY == self.plateau.computerLength and player.noPlayer == 1) 
 
-    def play(self, plateau : list[list[int]], player : Player, noPlay : int):
+    def play(self, plateau : Plateau, player : Player, noPlay : int):
         """
         noPlay must be 0 or 1
         If noPlay = 0, the player move, if noPlay = 1, the  player place a Wall
@@ -26,34 +26,45 @@ class Game:
         """
 
         if noPlay == 0:
-            cases = plateau.reachableFrom((player.coordX, player.coordY))
+            cases = plateau.reachableFrom(player.coordX, player.coordY)
             
-            for i in range(0, cases.length):
-                print(str(i) + ": ", str((cases[i][0], cases[i][1])))
+            for i in range(0, len(cases)):
+                x, y = cases[i]
+                print(i,": ", cases[i])
             
             next = int(input("where do you want to go ? \n"))
-            while next>=0 and next < cases.length:
+            while not(next>=0 and next < len(cases)):
                 next = int(input("Not valid, where do you want to go ? \n"))
             
-            player.move( cases[next][0], cases[next][1])
+            x , y = cases[next]
+            plateau.movePlayer(player,cases[next])  # Move player on the map
+            player.move(x, y)   # Modifiate player attribute
             
     
         if noPlay == 1:
-            coordX, coordY, direction= tuple(input("Give coordX, coordY and direction"))
+            coords = input("Give coordX, coordY and direction\n").split()
+            coordX, coordY, direction = coords[0], coords[1], coords[2]
+            if direction not in ["vertical", "horizontal"]:
+                direction = "vertical"
             newWall = Wall()
             newWall.place(int(coordX), int(coordY), direction)
             player.useWall()
 
             while not plateau.placeWall(newWall):
-                coordX, coordY, direction= tuple(input("Not valid\nGive another coordX, coordY and direction\n"))
+                coords = input("Not valid\nGive another coordX, coordY and direction\n").split()
+                coordX, coordY, direction = int(coords[0]), int(coords[1]), coords[2]
+                if direction not in ["vertical", "horizontal"]:
+                    direction = "vertical"
                 newWall = Wall()
                 newWall.place(int(coordX), int(coordY), direction)
                 player.useWall()
     
-    def game(self):
+    def start(self):
         i=0
         while(True):
             self.turn = i/2 + 1 
+            
+            print(self.plateau.affichagePlateau())
             choice = int(input(self.player1.name +", what do you want to do :\n 0 : move, 1 : place a wall"))
             self.play(self.plateau, self.player1, choice)
             if self.isWin(self.player1):
