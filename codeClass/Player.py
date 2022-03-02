@@ -15,7 +15,7 @@ class Player:
         if(self.noPlayer == 1):
             self.coordY = 0
         else:
-            self.coordY = mapLength
+            self.coordY = int(mapLength-1)
 
     def getCoord(self):
         """
