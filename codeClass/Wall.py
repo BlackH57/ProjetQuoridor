@@ -18,7 +18,14 @@ class Wall:
             self.coordX = coordX
             self.coordY = coordY
             self.direction = direction
+    
 
+    def rotate(self):
+        if self.direction == "vertical":
+            self.direction = "horizontal"
+        else:
+            self.direction = "vertical"
+            
     def getPlaced(self):
         """
         Return the value of placed. True if it is placed, if not False
