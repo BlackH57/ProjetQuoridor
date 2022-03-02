@@ -1,24 +1,30 @@
-from codeClass import Player
-from codeClass import Wall
+import pygame
+from codeClass.Player import Player
+from codeClass.Wall import Wall
 
 class Plateau:
     length =9
-    def __init__(self, length : int, player1 : Player, player2 : Player, imageFileName : str):
+    def __init__(self, length = 9, player1 = None, player2 = None, imageFileName = "assets/Plateau.png"):
         """
         Initiate an instance of plateau.
         length : int, player1 : Player, player2 : Player, imageFileName : str
         """
         self.length = length    #for now must always be 9
-        self.computerLength = 2*length-1
+        self.computerLength = 2*length -1
         self.plateau = []
         self.player1 = player1
         self.player2 = player2
         self.wallPlaced = []
 
+        self.image = pygame.image.load(imageFileName)
+
         #init plateau
         for i in range(0,self.computerLength):
-            self.plateau.append([0 for i in range(0,length)])
+            self.plateau.append([0 for i in range(0,self.computerLength)])
 
+        self.plateau[player1.coordX][player1.coordY] = 1
+        print("("+str(player2.coordX)+","+str(player2.coordY)+" computerLength:"+ str(self.computerLength))
+        self.plateau[player2.coordX][player2.coordY] = 2
 
     def setPlayeur(self,noPlayer : int, player : Player):
         """
@@ -30,7 +36,7 @@ class Plateau:
         elif (noPlayer == 2):
             self.player2 = player
         else:
-            print("f{noPplayer} n'est pas un chiffre valide")
+            print(noPlayer, "n'est pas un chiffre valide")
 
     def placeWall(self, wall : Wall):
         """
@@ -38,15 +44,17 @@ class Plateau:
         wall: Wall. Must have direction, and coordonate initiate.
         """
         coordX, coordY, direction = wall.coordX, wall.coordY, wall.direction
-        
+        if not((coordX%2 == 1 and direction == "vertical") or (coordY%2 == 1 and direction == "horizontal")):
+            return False
+
         if wall.direction == "horizontal" and self.plateau[coordX][coordY] == 0 and self.plateau[coordX+1][coordY] == 0 and self.plateau[coordX+2][coordY] == 0 and coordX<=self.computerLength-3:
-            self.placeWall.append(wall)
+            self.wallPlaced.append(wall)
             self.plateau[coordX][coordY] = 3
             self.plateau[coordX+1][coordY] = 3
             self.plateau[coordX+2][coordY] = 3
             return True
         elif wall.direction == "vertical" and self.plateau[coordX][coordY] == 0 and self.plateau[coordX][coordY+1] == 0 and self.plateau[coordX][coordY+2] == 0 and coordY<=self.computerLength-3:
-            self.placeWall.append(wall)
+            self.wallPlaced.append(wall)
             self.plateau[coordX][coordY] = 3
             self.plateau[coordX][coordY+1] = 3
             self.plateau[coordX][coordY+2] = 3
@@ -54,12 +62,12 @@ class Plateau:
         
         return False
 
-    def reachableFrom(self,coords : tuple(int,int)):
+    def reachableFrom(self, coordX, coordY):
         """
         coords : (int,int)
         Return a set of case accessible from coords
         """
-        coordX, coordY = coords
+        # coordX, coordY = coords
         res = []
 
         if coordX<= self.computerLength-2 and self.plateau[coordX+1][coordY] == 0 and self.plateau[coordX+2][coordY] == 0:
@@ -112,7 +120,12 @@ class Plateau:
                 if coordY<= self.computerLength -2 and self.plateau[coordX+1][coordY-2] == 0:
                     res.append((coordX+2, coordY-2))
 
-        return {case for case in res}
+        return list(set(res))
+    
+    
+    def movePlayer(self, player, coords):
+        self.plateau[player.coordX][player.coordY] = 0
+        self.plateau[coords[0]][coords[1]] = player.noPlayer
 
     def affichagePlateau(self):
         """
@@ -120,24 +133,25 @@ class Plateau:
         """
         res = ""
         for i in range(0,self.computerLength):
-            res+= '-'
-
+            res+= '---'
+        res+='\n'
         for i in range(0, self.computerLength):
             res+='|'
             for j in range(0, self.computerLength):
-                if self.plateau[i][j] == 0: # nothing
+                # print("coords = ("+str(i)+","+str(j)+")" + "computerLength ="+str(self.computerLength))
+                if self.plateau[j][i] == 0: # nothing
                     res += " ■ "
-                if self.plateau[i][j] == 1: # player1
+                if self.plateau[j][i] == 1: # player1
                     res += " M "
-                if self.plateau[i][j] == 2: # player2
+                if self.plateau[j][i] == 2: # player2
                     res += " A "
-                if self.plateau[i][j] == 3: # wall
+                if self.plateau[j][i] == 3: # wall
                     res += "+++"
 
             res+='|\n'
 
-        for i in range(0,self.computerLength+2):
-            res+= '-'
+        for i in range(0,self.computerLength):
+            res+= '---'
         return res
 
     def __str__(self):
