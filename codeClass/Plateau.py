@@ -1,6 +1,9 @@
+from codeClass import Player
+from codeClass import Wall
+
 class Plateau:
     length =9
-    def __init__(self, length, player1, player2, imageFileName):
+    def __init__(self, length : int, player1 : Player, player2 : Player, imageFileName : str):
         """
         Initiate an instance of plateau.
         length : int, player1 : Player, player2 : Player, imageFileName : str
@@ -17,7 +20,7 @@ class Plateau:
             self.plateau.append([0 for i in range(0,length)])
 
 
-    def setPlayeur(self,noPlayer, player):
+    def setPlayeur(self,noPlayer : int, player : Player):
         """
         player : Player, noPlayer : 1 or 2
         set one of the player.
@@ -29,16 +32,29 @@ class Plateau:
         else:
             print("f{noPplayer} n'est pas un chiffre valide")
 
-    def placeWall(self, wall):
+    def placeWall(self, wall : Wall):
         """
         place a Wall on the map.
         wall: Wall. Must have direction, and coordonate initiate.
         """
         coordX, coordY, direction = wall.coordX, wall.coordY, wall.direction
-        self.plateau[coordX][coordY] = 2
-        self.placeWall.append(wall)
+        
+        if wall.direction == "horizontal" and self.plateau[coordX][coordY] == 0 and self.plateau[coordX+1][coordY] == 0 and self.plateau[coordX+2][coordY] == 0 and coordX<=self.computerLength-3:
+            self.placeWall.append(wall)
+            self.plateau[coordX][coordY] = 3
+            self.plateau[coordX+1][coordY] = 3
+            self.plateau[coordX+2][coordY] = 3
+            return True
+        elif wall.direction == "vertical" and self.plateau[coordX][coordY] == 0 and self.plateau[coordX][coordY+1] == 0 and self.plateau[coordX][coordY+2] == 0 and coordY<=self.computerLength-3:
+            self.placeWall.append(wall)
+            self.plateau[coordX][coordY] = 3
+            self.plateau[coordX][coordY+1] = 3
+            self.plateau[coordX][coordY+2] = 3
+            return True
+        
+        return False
 
-    def reachableFrom(self,coords):
+    def reachableFrom(self,coords : tuple(int,int)):
         """
         coords : (int,int)
         Return a set of case accessible from coords

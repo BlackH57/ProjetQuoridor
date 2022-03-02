@@ -2,22 +2,22 @@ import pygame
 
 class Wall:
 
-    def __init__(self, num, coordX, coordY, direction, imageFileName):
-        self.num = num
+    def __init__(self, coordX = None, coordY = None, direction = None, imageFileName = "assets/Wall.png"):
         self.placed = False
         self.coordX = coordX
         self.coordY = coordY
         self.direction = direction
         self.image = pygame.image.load(imageFileName)
 
-    def place(self, coordX, coordY, direction):
+    def place(self, coordX : int, coordY : int, direction : str):
         """
         Set coordX, coordY and direction attribute
         """
-        self.placed = True
-        self.coordX = coordX
-        self.coordY = coordY
-        self.direction = direction
+        if not self.placed:
+            self.placed = True
+            self.coordX = coordX
+            self.coordY = coordY
+            self.direction = direction
 
     def getPlaced(self):
         """
