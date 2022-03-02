@@ -46,8 +46,6 @@ class Plateau:
         coordX, coordY = coords
         res = []
 
-        # Base
-        # We must check if we're far enough from the edges, if there's a wall between the coords and destination and if the destination case is free (i.e. there is a 0 in it)
         if coordX<= self.computerLength-2 and self.plateau[coordX+1][coordY] == 0 and self.plateau[coordX+2][coordY] == 0:
             res.append((coordX + 2, coordY))
 

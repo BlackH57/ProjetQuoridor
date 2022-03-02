@@ -9,6 +9,10 @@ class Game:
         self.turn = 0
     
     def isWin(self, joueur):
+        """
+        joueur : Player
+        If the player is on his winning line, return True. Else return False
+        """
         return (joueur.coordY == 0 and joueur.noPlayer == 2) or (joueur.coordY == self.plateau.computerLength and joueur.noPlayer == 1) 
 
     
