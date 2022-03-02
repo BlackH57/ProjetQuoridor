@@ -32,7 +32,10 @@ class Game:
                 print(str(i) + ": ", str((cases[i][0], cases[i][1])))
             
             next = int(input("where do you want to go ? \n"))
-            return player.move( cases[next][0], cases[next][1])
+            while next>=0 and next < cases.length:
+                next = int(input("Not valid, where do you want to go ? \n"))
+            
+            player.move( cases[next][0], cases[next][1])
             
     
         if noPlay == 1:
