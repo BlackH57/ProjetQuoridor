@@ -32,12 +32,12 @@ class Game:
                 x, y = cases[i]
                 print(i,": ", cases[i])
             
-            next = int(input("where do you want to go ? \n"))
-            while not(next>=0 and next < len(cases)):
+            nextMove = int(input("where do you want to go ? \n"))
+            while not(nextMove>=0 and next < len(cases)):
                 next = int(input("Not valid, where do you want to go ? \n"))
             
-            x , y = cases[next]
-            plateau.movePlayer(player,cases[next])  # Move player on the map
+            x , y = cases[nextMove]
+            plateau.movePlayer(player,cases[nextMove])  # Move player on the map
             player.move(x, y)   # Modifiate player attribute
             
     
