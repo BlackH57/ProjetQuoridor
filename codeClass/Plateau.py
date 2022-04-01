@@ -36,7 +36,7 @@ class Plateau:
         elif (noPlayer == 2):
             self.player2 = player
         else:
-            print(noPlayer, "n'est pas un chiffre valide")
+            print(noPlayer, " n'est pas un chiffre valide")
 
     def placeWall(self, wall : Wall):
         """
@@ -126,6 +126,7 @@ class Plateau:
     def movePlayer(self, player, coords):
         self.plateau[player.coordX][player.coordY] = 0
         self.plateau[coords[0]][coords[1]] = player.noPlayer
+     
 
     def affichagePlateau(self):
         """
