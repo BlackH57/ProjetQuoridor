@@ -1,4 +1,5 @@
 import pygame
+window_length = 1000
 
 class Player:
 
