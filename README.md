@@ -6,7 +6,7 @@
 * [General Info](#general-info)
 * [Setup](#setup)
 * [Feature](#feature)
-* [To Do List][#to-do-list] 
+* [To Do List](#to-do-list)
 
 ***
 
