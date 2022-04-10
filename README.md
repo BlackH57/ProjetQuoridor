@@ -4,6 +4,11 @@
 
 * [Introduction](#introduction)
 * [General Info](#general-info)
+* [Setup](#setup)
+* [Feature](#feature)
+* [To Do List][#to-do-list] 
+
+***
 
 ## Introduction
 In perspective of Sorbonne University PIMA classes, we must develop a game named Quoridor.
