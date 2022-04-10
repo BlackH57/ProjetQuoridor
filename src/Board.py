@@ -144,15 +144,14 @@ class Board:
             return []
 
         res = []
-        print("Coordinates are ok")
         # If we want to go left
         # If we are one case afar from the edge and there's no wall between
         if coordX < self.length - 1 and self.plateau[coordX][coordY].rightWall is None:
-            print("looking for : ", coordX + 1, ",", coordY)
+            # print("looking for : ", coordX + 1, ",", coordY)
             # If the case is free we add
             if self.plateau[coordX + 1][coordY].player is None:
                 res.append(self.plateau[coordX + 1][coordY])
-                print(coordX + 1, ",", coordY, "has been append")
+                # print(coordX + 1, ",", coordY, "has been append")
 
             # If the case is already taken by a player
             # Check if the next case is free and there's no wall
@@ -172,8 +171,8 @@ class Board:
                         lowerCase = self.plateau[coordX + 1][coordY + 1]
                         if self.plateau[coordX + 1][coordY].underWall is None and lowerCase.player is None:
                             res.append(lowerCase)
-            else:
-                print("Nothing has been append")
+            # else:
+                # print("Nothing has been append")
         # If we want to go right
         # If we are one case afar from the edge and there's no wall between
         if coordX >= 1 and self.plateau[coordX - 1][coordY].rightWall is None:
@@ -249,7 +248,7 @@ class Board:
                             res.append(rightCase)
 
         res = list(set(res))
-        print("  reachable:\n", res)
+        # print("  reachable:\n", res)
         return res   # Delete the cases that appears several times.
 
 
