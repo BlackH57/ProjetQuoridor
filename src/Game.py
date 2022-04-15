@@ -34,6 +34,9 @@ class Game:
 
     def movePlay(self, player: Player, coordX: int, coordY: int):
         """
+        player : Player
+        coordX : int
+        coordY : int
         Try to move the player to coords
         """
         self.board.movePlayer(player, self.board.plateau[coordX][coordY])
@@ -41,6 +44,13 @@ class Game:
 
 
     def wallPlay(self, player: Player, coordX: int, coordY: int, orientation: str):
+        """
+        player : Player
+        coordX : int
+        coordY : int
+        orientation : str
+        Try to place a wall. Return true if succeeded, false otherwise
+        """
         if player.nbWall > 0 and self.board.placeWall(coordX, coordY, orientation):
             player.useWall()
             return True
@@ -48,6 +58,12 @@ class Game:
 
 
     def playerPlay(self, player: Player, choice: int):
+        """
+        player : Player
+        choice : int
+        Make the player play, if choice = 0 it moves, if choice = 1 place a wall
+        Return True if succeeded to play, False otherwise
+        """
         if choice == 0:
             reachable = self.board.reachableCase(player.coordX, player.coordY)
             i = 0
@@ -112,6 +128,9 @@ class Game:
             if self.isWin(self.p2):
                 winner = self.p2
                 break
+
+        print("The winner is", winner.name, "!")
         print("----------- Fin partie -----------")
+
 
         return winner

@@ -298,6 +298,7 @@ class Board:
             res += "__"
         return res
 
+
     def __str__(self):
         """
         For now is strPlateau but should be something like
