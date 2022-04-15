@@ -72,7 +72,7 @@ def launchGame():
 if __name__ == "__main__":
     p1 = Player.Player(1, "Henri", 5, 0, 9, "assets/Joueur1.png")
     p2 = Player.Player(2, "Zichun", 5, 8, 9, "assets/Joueur1.png")
-    board = Board.Board(15, "assets/Board.png")
+    board = Board.Board(9, "assets/Board.png")
 
     game = Game.Game(board, p1, p2)
 
@@ -96,6 +96,13 @@ if __name__ == "__main__":
                     for cases in game.board.plateau:
                         for case in cases:
                             case.switchAppearanceDefault()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    mx, my = pygame.mouse.get_pos()
+                    # print("mouse coords : ", (mx, my))
+                    # cx, cy = game.board.mPosConvert(mx, my)
+                    # print("case : ", (cx, cy))
+                    game.board.showReachable(screen, mx, my)
 
         pygame.display.flip()
 

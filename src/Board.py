@@ -328,20 +328,16 @@ class Board:
                 window.blit(image, ((x + 1) * caseLength, (y + 1) * caseLength))
 
 
-# Not used
-# def updateBoard(self, listCase: list[Case.Case], window: pygame.Surface):
-#     """
-#     Update appearence of lisf of case on the window
-#     """
-#
-#     caseLength = windowsLength/(self.length + 2)
-#
-#     for case in listCase:
-#         x, y = case.getCoords()
-#         image = case.image
-#         pygame.transform.scale(image, (10, 10))
-#         image = image.convert()
-#         # window.blit(image, ((x+1)*caseLength, (y+1)*caseLength))
+    def mPosConvert(self, coordX: int, coordY: int):
+        caseLength = windowsLength / (self.length + 2)
+        return int(coordX//caseLength) - 1, int(coordY//caseLength) - 1
+
+
+    def showReachable(self, window: pygame.surface, coordX, coordY):
+        x, y = self.mPosConvert(coordX, coordY)
+        reachableCase = self.reachableCase(x, y)
+        for case in reachableCase:
+            case.switchAppearanceDefault()
 
 
 def initBoard():
