@@ -4,7 +4,7 @@ from src import Wall
 from src import Player
 
 boardLength = 9
-
+windowsLength = 1000
 
 class Board:
 
@@ -306,3 +306,47 @@ class Board:
         :return:
         """
         return self.strPlateau()
+
+
+    def updateScreen(self, window: pygame.Surface):
+        """
+        Update appearence of lisf of all cases in the window
+        """
+
+        caseLength = windowsLength / (self.length + 2)
+
+        for cases in self.plateau:
+            for case in cases:
+                x, y = case.getCoords()
+
+                image = case.image
+                image = pygame.transform.scale(image, (caseLength, caseLength))
+
+                # imageTest = pygame.image.load("assets/CaseReachable.png")
+                # imageTest = pygame.transform.scale(imageTest, (caseLength, caseLength))
+
+                window.blit(image, ((x + 1) * caseLength, (y + 1) * caseLength))
+
+
+# Not used
+# def updateBoard(self, listCase: list[Case.Case], window: pygame.Surface):
+#     """
+#     Update appearence of lisf of case on the window
+#     """
+#
+#     caseLength = windowsLength/(self.length + 2)
+#
+#     for case in listCase:
+#         x, y = case.getCoords()
+#         image = case.image
+#         pygame.transform.scale(image, (10, 10))
+#         image = image.convert()
+#         # window.blit(image, ((x+1)*caseLength, (y+1)*caseLength))
+
+
+def initBoard():
+    size = windowsLength, windowsLength
+    screen = pygame.display.set_mode(size)
+    pygame.display.set_caption("Quoridor project")
+    screen.fill((150, 50, 10))
+    return screen

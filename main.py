@@ -1,3 +1,5 @@
+import pygame
+
 from src import Board
 from src import Player
 from src import Wall
@@ -59,8 +61,8 @@ def test():
 
 
 def launchGame():
-    p1 = Player.Player(1, "Henri", 0, 5, 9, "assets/Joueur1.png")
-    p2 = Player.Player(2, "Zichun", 8, 5, 9, "assets/Joueur1.png")
+    p1 = Player.Player(1, "Henri", 5, 0, 9, "assets/Joueur1.png")
+    p2 = Player.Player(2, "Zichun", 5, 8, 9, "assets/Joueur1.png")
     board = Board.Board(Board.boardLength, "assets/Board.png")
 
     game = Game.Game(board, p1, p2)
@@ -68,4 +70,33 @@ def launchGame():
 
 
 if __name__ == "__main__":
-    launchGame()
+    p1 = Player.Player(1, "Henri", 5, 0, 9, "assets/Joueur1.png")
+    p2 = Player.Player(2, "Zichun", 5, 8, 9, "assets/Joueur1.png")
+    board = Board.Board(15, "assets/Board.png")
+
+    game = Game.Game(board, p1, p2)
+
+    pygame.init()
+    screen = Board.initBoard()
+
+    running = True
+    while running:
+
+        game.board.updateScreen(screen)  # blit all cases in the board
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+                if event.key == pygame.K_c:
+                    print("C key has been pressed")
+                    for cases in game.board.plateau:
+                        for case in cases:
+                            case.switchAppearanceDefault()
+
+        pygame.display.flip()
+
+    pygame.quit()

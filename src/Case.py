@@ -16,6 +16,7 @@ class Case:
         # May be removed later
         self._coordX = coordX
         self._coordY = coordY
+        self.imageFileName = imageFileName
         self.image = pygame.image.load(imageFileName)
         self.rect = self.image.get_rect()
 
@@ -97,12 +98,18 @@ class Case:
 
         # load new image
         self.image = pygame.image.load(imageFileName)
+        self.imageFileName = imageFileName
         self.rect = self.image.get_rect()
 
         # set new image coordinate
         self.rect.x = x
         self.rect.y = y
 
+    def switchAppearanceDefault(self):
+        if self.imageFileName == "assets/Case.png":
+            self.switchAppearance("assets/CaseReachable.png")
+        else:
+            self.switchAppearance("assets/Case.png")
 
     def __str__(self):
         """
