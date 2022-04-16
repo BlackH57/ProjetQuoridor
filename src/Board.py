@@ -6,6 +6,7 @@ from src import Player
 boardLength = 9
 windowsLength = 1000
 
+
 class Board:
 
     def __init__(self, length: int, imageFileName: str):

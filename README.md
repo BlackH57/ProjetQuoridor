@@ -4,11 +4,6 @@
 
 * [Introduction](#introduction)
 * [General Info](#general-info)
-* [Setup](#setup)
-* [Feature](#feature)
-* [To Do List](#to-do-list)
-
-***
 
 ## Introduction
 In perspective of Sorbonne University PIMA classes, we must develop a game named Quoridor.
@@ -33,7 +28,7 @@ This project simulate the game of Quoridor. Implemented by [Henri Besancenot](ht
 To run this project, [download the file](https://github.com/BlackH57/ProjetQuoridor/archive/refs/heads/main.zip) and execute in terminal:
 
 ```
-$ cd ../path/to/file/ProjetQuoridor
+$ cd ../path/to/file/
 $ py main.py
 ```
 

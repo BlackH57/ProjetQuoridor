@@ -99,7 +99,6 @@ class Game:
             return True
 
 
-
     def start(self):
         """
         Initiate two players, one board and cases, and simulate (for now) on the terminal a game of Quoridor
