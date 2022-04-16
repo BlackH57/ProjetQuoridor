@@ -333,11 +333,12 @@ class Board:
         return int(coordX//caseLength) - 1, int(coordY//caseLength) - 1
 
 
-    def showReachable(self, window: pygame.surface, coordX, coordY):
-        x, y = self.mPosConvert(coordX, coordY)
-        reachableCase = self.reachableCase(x, y)
+    def switchAppearanceReachable(self, window: pygame.surface, coordX, coordY):
+        # x, y = self.mPosConvert(coordX, coordY)
+        reachableCase = self.reachableCase(coordX, coordY)
         for case in reachableCase:
             case.switchAppearanceDefault()
+        # return reachableCase # not used
 
 
 def initBoard():

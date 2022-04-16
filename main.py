@@ -4,7 +4,7 @@ from src import Board
 from src import Player
 from src import Wall
 from src import Game
-
+from src import Case
 
 def test():
     print("----------- DEBUT TEST -----------\n")
@@ -69,47 +69,95 @@ def launchGame():
     game.start()
 
 
-if __name__ == "__main__":
-    p1 = Player.Player(1, "Henri", 5, 0, 9, "assets/Player1.png")
-    p2 = Player.Player(2, "Zichun", 5, 8, 9, "assets/Player2.png")
-
+def launchWindowGame():
     board = Board.Board(9, "assets/Board.png")
+
+    p1 = Player.Player(1, "Henri", board.length//2, 0, 9, "assets/Player1.png")
+    p2 = Player.Player(2, "Zichun", board.length//2, board.length -1, 9, "assets/Player2.png")
+
+
 
     iLen = Board.windowsLength/(board.length+2)
     p1.image = pygame.transform.scale(p1.image, (iLen, iLen))
     p2.image = pygame.transform.scale(p2.image, (iLen, iLen))
+
     game = Game.Game(board, p1, p2)
 
     pygame.init()
     screen = Board.initBoard()
 
     running = True
+    mainPlayer = p1
+    # caseReachable: list[Case.Case] = []
     while running:
 
+        # Affiche les cases
         game.board.updateScreen(screen)  # blit all cases in the board
+
+        # Affichage player
         screen.blit(game.p1.image, ((p1.coordX + 1) * iLen, (p1.coordY + 1) * iLen))
         screen.blit(game.p2.image, ((p2.coordX + 1) * iLen, (p2.coordY + 1) * iLen))
 
+
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT:  # Default exit for pygame
                 running = False
 
+            # Input clavier
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+
+                # Test
                 if event.key == pygame.K_c:
                     print("C key has been pressed")
                     for cases in game.board.plateau:
                         for case in cases:
                             case.switchAppearanceDefault()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
+
+            # Input souris
+            if event.type == pygame.MOUSEBUTTONDOWN:  # La plupart du jeu se fera ici.
+                if event.button == 1:  # Condition de jeu
+                    print("Bouton 1 has been clicked")
                     mx, my = pygame.mouse.get_pos()
-                    # print("mouse coords : ", (mx, my))
-                    # cx, cy = game.board.mPosConvert(mx, my)
-                    # print("case : ", (cx, cy))
-                    game.board.showReachable(screen, mx, my)
+                    cx, cy = game.board.mPosConvert(mx, my)
+                    print("case : ", (cx, cy))
+                    print("Joueur coords: ", (mainPlayer.coordX, mainPlayer.coordY))
+
+                    # Si on click sur le joueur, change l'apparence des cases atteignables
+                    if (cx, cy) == (mainPlayer.coordX, mainPlayer.coordY):
+                        print("Condition passed")
+                        game.board.switchAppearanceReachable(screen, cx, cy)
+                        continue
+
+                    if game.board.plateau[cx][cy].imageFileName == "assets/CaseReachable.png":
+                        game.movePlay(mainPlayer, cx, cy)
+                        # for case in caseReachable:
+                        #     case.switchAppearanceDefault()
+                        # caseReachable = []
+
+                        for cases in game.board.plateau:
+                            for case in cases:
+                                case.switchAppearance("assets/Case.png")
+
+                        # Si on a jouer on change le joueur dont c'est le tour
+                        if mainPlayer == p1:
+                            mainPlayer = p2
+                        else:
+                            mainPlayer = p1
+
+
+                if event.button == 3:  # Click de test click droit
+                    mx, my = pygame.mouse.get_pos()
+                    print("mouse coords : ", (mx, my))
+                    cx, cy = game.board.mPosConvert(mx, my)
+                    print("case : ", (cx, cy))
+                    board.switchAppearanceReachable(screen, cx, cy)
 
         pygame.display.flip()
 
     pygame.quit()
+
+
+if __name__ == "__main__":
+    launchWindowGame()
