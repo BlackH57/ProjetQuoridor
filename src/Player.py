@@ -1,3 +1,6 @@
+import pygame
+
+
 class Player:
 
     def __init__(self, noPlayer: int, name: str, coordX: int, coordY: int, nbWall: int, imageFileName: str):
@@ -7,6 +10,8 @@ class Player:
         self.coordX = coordX
         self.coordY = coordY
         self.imageFileName = imageFileName
+        self.image = pygame.image.load(imageFileName)
+        self.rect = self.image.get_rect()
 
 
     def move(self, coordX: int, coordY: int):

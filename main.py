@@ -70,10 +70,14 @@ def launchGame():
 
 
 if __name__ == "__main__":
-    p1 = Player.Player(1, "Henri", 5, 0, 9, "assets/Joueur1.png")
-    p2 = Player.Player(2, "Zichun", 5, 8, 9, "assets/Joueur1.png")
+    p1 = Player.Player(1, "Henri", 5, 0, 9, "assets/Player1.png")
+    p2 = Player.Player(2, "Zichun", 5, 8, 9, "assets/Player2.png")
+
     board = Board.Board(9, "assets/Board.png")
 
+    iLen = Board.windowsLength/(board.length+2)
+    p1.image = pygame.transform.scale(p1.image, (iLen, iLen))
+    p2.image = pygame.transform.scale(p2.image, (iLen, iLen))
     game = Game.Game(board, p1, p2)
 
     pygame.init()
@@ -83,6 +87,8 @@ if __name__ == "__main__":
     while running:
 
         game.board.updateScreen(screen)  # blit all cases in the board
+        screen.blit(game.p1.image, ((p1.coordX + 1) * iLen, (p1.coordY + 1) * iLen))
+        screen.blit(game.p2.image, ((p2.coordX + 1) * iLen, (p2.coordY + 1) * iLen))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
