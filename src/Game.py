@@ -1,7 +1,7 @@
 from src import Player
 from src import Board
-# import pygame
 
+# import pygame
 
 
 imageP1 = "assets/Player1.png"
@@ -23,14 +23,13 @@ class Game:
 
         self.turn = 0
 
-
     def isWin(self, player: Player):
         """
         player : Player
         If the player is on his winning line, return True, otherwise return False
         """
-        return (player.coordY == 0 and player.noPlayer == 2) or (player.coordY == self.board.length and player.noPlayer == 1)
-
+        return (player.coordY == 0 and player.noPlayer == 2) or (
+                    player.coordY == self.board.length - 1 and player.noPlayer == 1)
 
     def movePlay(self, player: Player, coordX: int, coordY: int):
         """
@@ -41,7 +40,6 @@ class Game:
         """
         self.board.movePlayer(player, self.board.plateau[coordX][coordY])
         # reachableCase = self.board.reachableCase(player.coordX, player.coordY)
-
 
     def wallPlay(self, player: Player, coordX: int, coordY: int, orientation: str):
         """
@@ -56,7 +54,7 @@ class Game:
             return True
         return False
 
-
+    # used in terminal for PvP
     def playerPlay(self, player: Player, choice: int):
         """
         player : Player
@@ -87,7 +85,6 @@ class Game:
         else:
             coordX, coordY, orientation = input("Where do you want to place the wall : ").split()
 
-
             while not self.wallPlay(player, int(coordX), int(coordY), orientation):
                 print("Invalid input")
                 c = int(input("Do you want to continue : (y:0, n:1"))
@@ -97,6 +94,16 @@ class Game:
                     return False
 
             return True
+
+
+    # Game event handler
+    def eventHandler(self, screen, event, mainPlayer):
+        played = self.board.eventHandler(screen, event, mainPlayer)
+
+        # Cas de fin
+        if self.isWin(mainPlayer):
+            return mainPlayer, played
+        return None, played
 
 
     def start(self):
@@ -130,6 +137,5 @@ class Game:
 
         print("The winner is", winner.name, "!")
         print("----------- Fin partie -----------")
-
 
         return winner

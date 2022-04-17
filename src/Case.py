@@ -105,11 +105,17 @@ class Case:
         self.rect.x = x
         self.rect.y = y
 
+
     def switchAppearanceDefault(self):
         if self.imageFileName == "assets/Case.png":
             self.switchAppearance("assets/CaseReachable.png")
         else:
             self.switchAppearance("assets/Case.png")
+
+
+#    def eventHandler(self, screen, event):
+#        if event.type == pygame.KEYDOWN:
+
 
     def __str__(self):
         """

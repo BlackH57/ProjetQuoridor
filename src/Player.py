@@ -46,5 +46,5 @@ class Player:
     def __str__(self):
         np = str(self.noPlayer)
         nw = str(self.nbWall)
-        c = str(self.getCoord())
+        c = str(self.getCoords())
         return "No player : " + np + " Name:" + self.name + "nb wall(s) left : " + nw + " coords :" + c

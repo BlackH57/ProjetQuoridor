@@ -25,6 +25,10 @@ class Board:
             self.image = pygame.image.load(imageFileName)
 
 
+
+    # Game purpose functions
+
+
     def placeWall(self, coordX: int, coordY: int, orientation: str):
         """
         coordX : int must be between 0 and self.length according to orientation
@@ -309,6 +313,53 @@ class Board:
         return self.strPlateau()
 
 
+
+    # pygame affichage
+
+
+    def eventHandler(self, screen, event, mainPlayer):
+        if event.type == pygame.MOUSEBUTTONDOWN:  # La plupart du jeu se fera ici.
+            mx, my = pygame.mouse.get_pos()
+            cx, cy = self.mPosConvert(mx, my)
+
+            # Appuie sur le joueur principale
+            if event.button == 1:
+                if (cx, cy) == (mainPlayer.coordX, mainPlayer.coordY):
+                    self.switchAppearanceReachable(screen, cx, cy)
+                    return False
+
+                case = self.plateau[cx][cy]
+                if case.imageFileName == "assets/CaseReachable.png":
+                    self.movePlayer(mainPlayer, case)
+                    self.defaultAppearance()
+                    return True
+
+
+            # Placement Mur
+            if event.button == 2:  # Click droit
+                print("mouse coords : ", (mx, my))
+                print("case : ", (cx, cy))
+                if self.placeWall(cx, cy, "r"):
+                    print("Mur placé")
+                else:
+                    print("Mur non placé")
+
+
+            # Debug reachableCase
+            if event.button == 3:
+                self.switchAppearanceReachable(screen, cx, cy)
+                return False
+
+        if event.type == pygame.KEYDOWN:
+
+            # Mettre en accessible toutes les cases
+            if event.key == pygame.K_c:
+                for cases in self.plateau:
+                    for case in cases:
+                        case.switchAppearanceDefault()
+
+
+
     def updateScreen(self, window: pygame.Surface):
         """
         Update appearence of lisf of all cases in the window
@@ -316,17 +367,25 @@ class Board:
 
         caseLength = windowsLength / (self.length + 2)
 
+        # Affichage mur
         for cases in self.plateau:
             for case in cases:
                 x, y = case.getCoords()
 
-                image = case.image
-                image = pygame.transform.scale(image, (caseLength, caseLength))
+                imageCase = case.image
+                imageCase = pygame.transform.scale(imageCase, (caseLength, caseLength))
 
                 # imageTest = pygame.image.load("assets/CaseReachable.png")
                 # imageTest = pygame.transform.scale(imageTest, (caseLength, caseLength))
 
-                window.blit(image, ((x + 1) * caseLength, (y + 1) * caseLength))
+                window.blit(imageCase, ((x + 1) * caseLength, (y + 1) * caseLength))
+                if case.underWall is not None:
+                    if case.underWall.orientation == "r":
+                        imageUnderWall = case.underWall.image
+                        decalage = caseLength * 85/100
+                        centrage = caseLength * 10/100
+                        imageUnderWall = pygame.transform.scale(imageUnderWall, (caseLength * 2 * 90/100, caseLength * 15/100))  # caseLength * 2 * 85 / 100, caseLength * 30 / 100
+                        window.blit(imageUnderWall, (x * caseLength + caseLength * 25/100 + decalage, (y + 1) * caseLength + decalage + centrage))
 
 
     def mPosConvert(self, coordX: int, coordY: int):
@@ -342,7 +401,14 @@ class Board:
         # return reachableCase # not used
 
 
-def initBoard():
+    def defaultAppearance(self):
+        for cases in self.plateau:
+            for case in cases:
+                case.switchAppearance("assets/Case.png")
+
+
+
+def initBoardDisplay():
     size = windowsLength, windowsLength
     screen = pygame.display.set_mode(size)
     pygame.display.set_caption("Quoridor project")
