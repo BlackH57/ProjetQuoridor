@@ -48,3 +48,7 @@ class Player:
         nw = str(self.nbWall)
         c = str(self.getCoords())
         return "No player : " + np + " Name:" + self.name + "nb wall(s) left : " + nw + " coords :" + c
+
+
+    def draw(self, screen, imageLength):
+        screen.blit(self.image, ((self.coordX + 1) * imageLength, (self.coordY + 1) * imageLength))

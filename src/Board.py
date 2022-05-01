@@ -2,9 +2,7 @@ import pygame
 from src import Case
 from src import Wall
 from src import Player
-
-boardLength = 9
-windowsLength = 1000
+import config
 
 
 class Board:
@@ -144,6 +142,7 @@ class Board:
         coordY : int must be between 0 and self.length
         Return a list of case that are reachable from coordX, coordY
         """
+
         if not (0 <= coordX < self.length and 0 <= coordY < self.length):
             print("Wrong coordinate")
             return []
@@ -176,8 +175,7 @@ class Board:
                         lowerCase = self.plateau[coordX + 1][coordY + 1]
                         if self.plateau[coordX + 1][coordY].underWall is None and lowerCase.player is None:
                             res.append(lowerCase)
-            # else:
-                # print("Nothing has been append")
+
         # If we want to go right
         # If we are one case afar from the edge and there's no wall between
         if coordX >= 1 and self.plateau[coordX - 1][coordY].rightWall is None:
@@ -213,7 +211,7 @@ class Board:
             # Check if the next case is free and there's no wall
             elif coordY >= 2:
                 # and there's no wall behind the player
-                if self.plateau[coordX][coordY - 1].underWall is None:
+                if self.plateau[coordX][coordY - 2].underWall is None:
                     if self.plateau[coordX][coordY - 2].player is None:
                         res.append(self.plateau[coordX][coordY - 2])
                 else:
@@ -252,9 +250,9 @@ class Board:
                         if self.plateau[coordX][coordY + 1].rightWall is None and rightCase.player is None:
                             res.append(rightCase)
 
-        res = list(set(res))
-        # print("  reachable:\n", res)
-        return res   # Delete the cases that appears several times.
+        res = list(set(res))    # Delete the cases that appears several times.
+
+        return res
 
 
     def strPlateau(self):
@@ -322,25 +320,29 @@ class Board:
             mx, my = pygame.mouse.get_pos()
             cx, cy = self.mPosConvert(mx, my)
 
+            if cx >= self.length or cy >= self.length:
+                return False, None, None, None
+
             # Appuie sur le joueur principale
             if event.button == 1:
                 if (cx, cy) == (mainPlayer.coordX, mainPlayer.coordY):
                     self.switchAppearanceReachable(screen, cx, cy)
-                    return False
+                    return False, None, None, None
 
                 case = self.plateau[cx][cy]
+                # Move the player
                 if case.imageFileName == "assets/CaseReachable.png":
                     self.movePlayer(mainPlayer, case)
                     self.defaultAppearance()
-                    return True
+                    return True, "move", cx, cy
 
 
             # Placement Mur
             if event.button == 2:  # Click droit
-                print("mouse coords : ", (mx, my))
-                print("case : ", (cx, cy))
+                # print("mouse coords : ", (mx, my))
+                # print("case : ", (cx, cy))
                 if self.placeWall(cx, cy, "r"):
-                    print("Mur placé")
+                    return True, "wall", cx, cy
                 else:
                     print("Mur non placé")
 
@@ -348,7 +350,7 @@ class Board:
             # Debug reachableCase
             if event.button == 3:
                 self.switchAppearanceReachable(screen, cx, cy)
-                return False
+                return False, None, None, None
 
         if event.type == pygame.KEYDOWN:
 
@@ -358,6 +360,9 @@ class Board:
                     for case in cases:
                         case.switchAppearanceDefault()
 
+                return False, None, None, None
+
+        return False, None, None, None
 
 
     def updateScreen(self, window: pygame.Surface):
@@ -365,7 +370,7 @@ class Board:
         Update appearence of lisf of all cases in the window
         """
 
-        caseLength = windowsLength / (self.length + 2)
+        caseLength = config.caseLength
 
         # Affichage mur
         for cases in self.plateau:
@@ -389,7 +394,7 @@ class Board:
 
 
     def mPosConvert(self, coordX: int, coordY: int):
-        caseLength = windowsLength / (self.length + 2)
+        caseLength = config.boardLengthWindow / (self.length + 2)
         return int(coordX//caseLength) - 1, int(coordY//caseLength) - 1
 
 
@@ -408,9 +413,9 @@ class Board:
 
 
 
+
 def initBoardDisplay():
-    size = windowsLength, windowsLength
-    screen = pygame.display.set_mode(size)
+    # size = boardLengthWindow, boardLengthWindow
+    screen = pygame.display.set_mode(config.gameWindSize)
     pygame.display.set_caption("Quoridor project")
-    screen.fill((150, 50, 10))
     return screen

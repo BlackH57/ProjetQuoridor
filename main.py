@@ -4,12 +4,9 @@ from src import Board
 from src import Player
 from src import Wall
 from src import Game
-from src import Case
-
-blackRGB = (0, 0, 0)
-whiteRGB = (255, 255, 255)
-greenRGB = (0, 255, 0)
-blueRGB = (0, 0, 128)
+from src.widget import InputBox
+from src.widget import Button
+import config
 
 
 def test():
@@ -69,20 +66,112 @@ def test():
 def launchGame():
     p1 = Player.Player(1, "Henri", 5, 0, 9, "assets/Joueur1.png")
     p2 = Player.Player(2, "Zichun", 5, 8, 9, "assets/Joueur1.png")
-    board = Board.Board(Board.boardLength, "assets/Board.png")
+    board = Board.Board(config.boardLength, "assets/Board.png")
 
     game = Game.Game(board, p1, p2)
     game.start()
 
 
 def launchWindowGame():
-    board = Board.Board(9, "assets/Board.png")
 
     # Initialisation des variables de jeu
-    p1 = Player.Player(1, "Henri", board.length // 2, 0, 9, "assets/Player1.png")
-    p2 = Player.Player(2, "Zichun", board.length // 2, board.length - 1, 9, "assets/Player2.png")
+    board = Board.Board(9, "assets/Board.png")
 
-    iLen = Board.windowsLength / (board.length + 2)
+    p1 = Player.Player(1, "Henri", board.length // 2, 0, 9, "assets/Player1.png")
+    p2 = Player.Player(2, "Nino", board.length // 2, board.length - 1, 9, "assets/Player2.png")
+
+    iLen = config.caseLength
+    p1.image = pygame.transform.scale(p1.image, (iLen, iLen))
+    p2.image = pygame.transform.scale(p2.image, (iLen, iLen))
+
+    game = Game.Game(board, p1, p2)
+
+    # Initialisation widget
+    showBox = InputBox.InputBox(iLen * (board.length + 1.5), iLen, iLen * 2, iLen * (board.length - 3))
+    rotateButton = Button.Button(None, iLen * (board.length + 2), iLen * (board.length - 1), iLen, iLen / 2, "horizontal", "rotate")
+
+    pygame.init()
+    screen = Board.initBoardDisplay()
+
+    running = True
+    mainPlayer = p1
+    winner = None
+
+    while running:
+        # Affiche les cases
+        screen.fill((150, 50, 10))
+        game.board.updateScreen(screen)
+
+        # Affichage widget
+        showBox.update()
+        showBox.draw(screen)
+        rotateButton.draw(screen)
+
+        # Affichage player
+        game.p1.draw(screen, iLen)
+        game.p2.draw(screen, iLen)
+
+        # Handler event
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:  # Default exit for pygame
+                running = False
+                break
+
+            # Sortie de jeu avec ECHAP
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+                    break
+
+            # Affichage
+            winner, play = game.eventHandler(screen, event, mainPlayer)
+            showBox.eventHandler(event)
+            rotateButton.eventHandler(event)
+
+            # Change tour joueur
+            if play[0]:
+
+                if mainPlayer == p1:
+                    if play[1] == "move":
+                        addedStr = "P1(" + str(play[2]) + "," + str(play[3]) + ")"
+                        print(addedStr)
+
+                    else:
+                        addedStr = "W(" + str(play[2]) + "," + str(play[3]) + ")"
+                        print(addedStr)
+                    mainPlayer = p2
+
+                else:
+                    if play[1] == "move":
+                        addedStr = "P2(" + str(play[2]) + "," + str(play[3]) + ")"
+                        print(addedStr)
+
+                    else:
+                        addedStr = "W(" + str(play[2]) + "," + str(play[3]) + ")"
+                        print(addedStr)
+                    mainPlayer = p1
+                # showBox.text = showBox.text + addedStr
+                # showBox.draw(screen)
+
+
+            if winner is not None:
+                running = False
+                break
+
+        pygame.display.flip()
+
+
+    pygame.quit()
+    return winner
+
+def launchGameWindow():
+    # Initialisation des variables de jeu
+    board = Board.Board(9, "assets/Board.png")
+
+    p1 = Player.Player(1, "Henri", board.length // 2, 0, 9, "assets/Player1.png")
+    p2 = Player.Player(2, "Nino", board.length // 2, board.length - 1, 9, "assets/Player2.png")
+
+    iLen = config.caseLength
     p1.image = pygame.transform.scale(p1.image, (iLen, iLen))
     p2.image = pygame.transform.scale(p2.image, (iLen, iLen))
 
@@ -97,40 +186,47 @@ def launchWindowGame():
 
     while running:
         # Affiche les cases
+        screen.fill((150, 50, 10))
         game.board.updateScreen(screen)
 
         # Affichage player
-        screen.blit(game.p1.image, ((p1.coordX + 1) * iLen, (p1.coordY + 1) * iLen))
-        screen.blit(game.p2.image, ((p2.coordX + 1) * iLen, (p2.coordY + 1) * iLen))
+        game.p1.draw(screen, iLen)
+        game.p2.draw(screen, iLen)
 
         # Handler event
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # Default exit for pygame
                 running = False
+                break
 
             # Sortie de jeu avec ECHAP
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+                    break
 
             # Affichage
-            winner, played = game.eventHandler(screen, event, mainPlayer)
+            winner, play = game.eventHandler(screen, event, mainPlayer)
+
 
             # Change tour joueur
-            if played:
+            if play[0]:
+
                 if mainPlayer == p1:
                     mainPlayer = p2
+
                 else:
                     mainPlayer = p1
 
             if winner is not None:
                 running = False
+                break
 
         pygame.display.flip()
 
-
     pygame.quit()
     return winner
+
 
 
 def winnerShow(player: Player.Player):
@@ -138,12 +234,12 @@ def winnerShow(player: Player.Player):
     x, y = 400, 100
     screen = pygame.display.set_mode((x, y))
 
-    screen.fill(whiteRGB)
+    screen.fill(config.whiteRGB)
     pygame.display.set_caption("Congratulation !")
 
     font = pygame.font.Font('freesansbold.ttf', 25)
     msg = player.name + " a gagné !"
-    text = font.render(msg, True, blackRGB, whiteRGB)
+    text = font.render(msg, True, config.blackRGB, config.whiteRGB)
     textRect = text.get_rect()
     textRect.center = (x // 2, y // 2)
 
@@ -165,9 +261,9 @@ def testWinnerShow():
 
 if __name__ == "__main__":
     player = launchWindowGame()
-    if player is not None:
-        winnerShow(player)
-
-    else:
-        p1 = Player.Player(3, "NONE", 0, 0, 0, "assets/Player1.png")
-        winnerShow(p1)
+    # if player is not None:
+    #     winnerShow(player)
+#
+    # else:
+    #     p1 = Player.Player(3, "NONE", 0, 0, 0, "assets/Player1.png")
+    #     winnerShow(p1)

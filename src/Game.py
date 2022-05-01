@@ -98,12 +98,17 @@ class Game:
 
     # Game event handler
     def eventHandler(self, screen, event, mainPlayer):
-        played = self.board.eventHandler(screen, event, mainPlayer)
+        play = self.board.eventHandler(screen, event, mainPlayer)
 
         # Cas de fin
         if self.isWin(mainPlayer):
-            return mainPlayer, played
-        return None, played
+            return mainPlayer, play
+        return None, play
+
+    def draw(self, screen, surface):
+        self.board.draw(screen, surface)
+        self.p1.draw(screen, surface)
+        self.p2.draw(screen, surface)
 
 
     def start(self):

@@ -38,5 +38,5 @@ $ py main.py
 * Play the game of Quoridor in the terminal with a friend
 
 ## To-do-list:
-* Add UI to make the game more comfortable
+* Add UI to make the game more comfortable (in making)
 * Implement agent to play against

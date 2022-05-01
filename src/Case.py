@@ -76,7 +76,7 @@ class Case:
             return False
 
         self.player = player
-        print("Le player", player.noPlayer, "a ete set")
+        # print("Le player", player.noPlayer, "a ete set")
         return True
 
 
