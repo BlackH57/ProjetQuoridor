@@ -55,3 +55,4 @@ endWindSize = 1000, 500
 boardLength = 9
 boardLengthWindow = gameWindSize[1] # Will be changed later for gameBoardSurface[3]
 caseLength = boardLengthWindow / (boardLength + 2)
+defaultbWall = 9

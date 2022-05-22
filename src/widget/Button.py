@@ -60,8 +60,8 @@ def main():
     screen = pygame.display.set_mode((640, 480))
     pygame.display.set_caption("test button")
     clock = pygame.time.Clock()
-    button1 = Button(100, 100, 140, 32, "button1")
-    button2 = Button(100, 300, 140, 32, "button2")
+    button1 = Button(100, 100, 140, 32, None, "button1")
+    button2 = Button(100, 300, 140, 32, None, "button2")
     buttons_list = [button1, button2]
 
     done = False

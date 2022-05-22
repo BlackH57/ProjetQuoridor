@@ -6,6 +6,8 @@ from src import Wall
 from src import Game
 from src.widget import InputBox
 from src.widget import Button
+from src import Window
+
 import config
 
 
@@ -164,68 +166,7 @@ def launchWindowGame():
     pygame.quit()
     return winner
 
-def launchGameWindow():
-    # Initialisation des variables de jeu
-    board = Board.Board(9, "assets/Board.png")
 
-    p1 = Player.Player(1, "Henri", board.length // 2, 0, 9, "assets/Player1.png")
-    p2 = Player.Player(2, "Nino", board.length // 2, board.length - 1, 9, "assets/Player2.png")
-
-    iLen = config.caseLength
-    p1.image = pygame.transform.scale(p1.image, (iLen, iLen))
-    p2.image = pygame.transform.scale(p2.image, (iLen, iLen))
-
-    game = Game.Game(board, p1, p2)
-
-    pygame.init()
-    screen = Board.initBoardDisplay()
-
-    running = True
-    mainPlayer = p1
-    winner = None
-
-    while running:
-        # Affiche les cases
-        screen.fill((150, 50, 10))
-        game.board.updateScreen(screen)
-
-        # Affichage player
-        game.p1.draw(screen, iLen)
-        game.p2.draw(screen, iLen)
-
-        # Handler event
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:  # Default exit for pygame
-                running = False
-                break
-
-            # Sortie de jeu avec ECHAP
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
-                    break
-
-            # Affichage
-            winner, play = game.eventHandler(screen, event, mainPlayer)
-
-
-            # Change tour joueur
-            if play[0]:
-
-                if mainPlayer == p1:
-                    mainPlayer = p2
-
-                else:
-                    mainPlayer = p1
-
-            if winner is not None:
-                running = False
-                break
-
-        pygame.display.flip()
-
-    pygame.quit()
-    return winner
 
 
 

@@ -65,10 +65,11 @@ def menuWindow():
 
     nomBox = InputBox.InputBox(150, 100, 200, 50, "")
 
-    launchGame = functools.partial(Window.display, gameWindow())
+    launchGamePlayer = functools.partial(Window.display, gameWindow(0, nomBox))
+    launchGameAgent = functools.partial(Window.display, gameWindow(1, nomBox))
     openParam = functools.partial(Window.display, parametersWindow(menuWind))
-    pvpButton = Button.Button(launchGame, 150, 175, 200, 50, "PvP", "contre Joueur")
-    pvjButton = Button.Button(launchGame, 150, 250, 200, 50, "PvA", "contre Agent")
+    pvpButton = Button.Button(launchGamePlayer, 150, 175, 200, 50, "PvP", "contre Joueur")
+    pvjButton = Button.Button(launchGameAgent, 150, 250, 200, 50, "PvA", "contre Agent")
 
     paramButton = Button.Button(openParam, 425, 25, 50, 50, "parametre", "Parametre")
     quoridor_text = Text.Text("QUORIDOR", 45, 5, 5, 200, 100)
@@ -109,14 +110,12 @@ def parametersWindow(screen):
     return parametersWind
 
 
-def gameWindow():
+# Pour l'instant pas d'argument mais quand il va y avoir un bot ca changera
+def gameWindow(playerType, nom):
     gameWind = Window("game", config.gameWindSize[0], config.gameWindSize[1])
 
     # Left side
     boardSurface = Surface.Surface(config.gameBoardSurface[0], config.gameBoardSurface[1], config.gameBoardSurface[2], config.gameBoardSurface[3], config.orangeRGB, "board")  # Will contain the game
-    # Init the game
-    
-    
     forfaitButton = Button.Button(None, config.gameForfaitButton[0], config.gameForfaitButton[1], config.gameForfaitButton[2], config.gameForfaitButton[3], None, "ABANDON")  # To give up
     suggestButton = Button.Button(None, config.gameSuggestButton[0], config.gameSuggestButton[1], config.gameSuggestButton[2], config.gameSuggestButton[3], None, "SUGGEST")     # To see what an agent would play
 
@@ -148,7 +147,7 @@ def endWindow():
 
 menu = menuWindow()
 parameters = parametersWindow(None)
-game = gameWindow()
+game = gameWindow(0, "defaultName")
 end = endWindow()
 
 mainWindows = [menu, parameters, game, end]

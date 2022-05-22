@@ -51,6 +51,8 @@ class InputBox:
         pygame.draw.rect(screen, self.color, self.rect, 2)
 
 
+    def __str__(self):
+        return self.text
 
 def main():
 

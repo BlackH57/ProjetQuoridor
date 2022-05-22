@@ -112,6 +112,9 @@ class Case:
         else:
             self.switchAppearance("assets/Case.png")
 
+    def draw(self, screen, surface):
+        return
+        #screen.blit()
 
 #    def eventHandler(self, screen, event):
 #        if event.type == pygame.KEYDOWN:

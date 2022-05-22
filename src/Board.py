@@ -411,8 +411,10 @@ class Board:
             for case in cases:
                 case.switchAppearance("assets/Case.png")
 
-
-
+    def draw(self, screen, surface):
+        for colonne in self.plateau:
+            for case in colonne:
+                case.draw(screen, surface)
 
 def initBoardDisplay():
     # size = boardLengthWindow, boardLengthWindow
